@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Books and Translations</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Biblical Canon & Other Scriptures</h1>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Author</th>
+                <th>Year Written</th>
+                <th>Is Apocrypha</th>
+                <th>Notes</th>
+                <th>Translations</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for book in books %}
+                <tr>
+                    <td>{{ book.name|safe }}</td>  <!-- Use 'safe' to render HTML -->
+                    <td>{{ book.author }}</td>
+                    <td>{{ book.year_written }}</td>
+                    <td>{{ book.is_apocrypha }}</td>
+                    <td>{{ book.notes }}</td>
+                    <td>
+                        <button class="toggle-translations" data-book="{{ book.name }}">Show Translations</button>
+                        <div class="translations-dropdown" style="display: none;">
+                            {% if translations[book.name] %}
+                                <ul>
+                                    {% for language, translation in translations[book.name] %}
+                                        <li>
+                                            {{ language }}: {{ translation|safe }}
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% else %}
+                                No translations available.
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
